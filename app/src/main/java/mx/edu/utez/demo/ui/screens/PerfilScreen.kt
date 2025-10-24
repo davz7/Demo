@@ -1,12 +1,14 @@
 package mx.edu.utez.demo.ui.screens
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.getValue
@@ -18,142 +20,209 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import mx.edu.utez.demo.R
-import mx.edu.utez.demo.ui.theme.DemoTheme
+
+@Composable
+fun EditarPublicacionScreen() {
+    var expandedMenuIndex by remember { mutableStateOf<Int?>(null) }
+
+    Scaffold(
+        topBar = { ProfileTopAppBar() },
+        bottomBar = { ProfileBottomNavigationBar() }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize()
+        ) {
+            ProfileInfoSection()
+            ImageGrid(
+                onPostOptionsClick = { index -> expandedMenuIndex = index },
+                expandedMenuIndex = expandedMenuIndex,
+                onDismissMenu = { expandedMenuIndex = null }
+            )
+        }
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditPostScreen() {
-    var title by remember { mutableStateOf(TextFieldValue("")) }
-    var description by remember { mutableStateOf(TextFieldValue("")) }
+fun ProfileTopAppBar() {
+    TopAppBar(
+        title = {
+            Image(
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Cancelar Edición", fontWeight = FontWeight.Normal) },
-                navigationIcon = {
-                    IconButton(onClick = { /* TODO: Navegar hacia atrás */ }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Volver")
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.White,
-                    titleContentColor = Color.Black
-                )
+                painter = painterResource(id = R.drawable.perfil), //Cambiar a LOGOOO
+                contentDescription = "Logo de la aplicación",
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(CircleShape)
             )
         },
-        containerColor = Color.White
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .padding(paddingValues)
-                .padding(26.dp)
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween
-        ) {
-            // Contenido superior
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                // Sección de la imagen
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(250.dp)
-                        .clip(MaterialTheme.shapes.medium)
-                        .background(Color.LightGray),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.post_image),
-                        contentDescription = "Imagen de la publicación",
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
-                    )
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Button(
-                            onClick = { /* TODO: Lógica para subir imagen */ },
-                            colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-                            shape = MaterialTheme.shapes.medium,
-                            border = BorderStroke(1.dp, Color.Gray)
-                        ) {
-                            Text("Subir nueva imagen", color = Color.Black)
-                        }
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Button(
-                            onClick = { /* TODO: Lógica para tomar foto */ },
-                            colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-                            shape = MaterialTheme.shapes.medium,
-                            border = BorderStroke(1.dp, Color.Gray)
-                        ) {
-                            Text("Tomar foto o video", color = Color.Black)
-                        }
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                // Campos de texto para editar
-                OutlinedTextField(
-                    value = title,
-                    onValueChange = { title = it },
-                    label = { Text("Editar título") },
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = MaterialTheme.shapes.medium
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                OutlinedTextField(
-                    value = description,
-                    onValueChange = { description = it },
-                    label = { Text("Editar descripción") },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(260.dp),
-                    shape = MaterialTheme.shapes.medium
-                )
+        actions = {
+            IconButton(onClick = {  }) {
+                Icon(Icons.Default.Menu, contentDescription = "Menú")
             }
+        },
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+    )
+}
 
-            // Botones de acción inferiores
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalAlignment = Alignment.CenterVertically
+@Composable
+fun ProfileInfoSection() {
+    Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(110.dp)
+        ) {
+            // Banner
+            Image(
+
+                painter = painterResource(id = R.drawable.banner),
+                contentDescription = "Banner del perfil",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(80.dp)
+                    .align(Alignment.BottomCenter)
+            )
+
+            // Foto de Perfil
+            Image(
+                painter = painterResource(id = R.drawable.perfil),
+                contentDescription = "Foto de perfil",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(90.dp)
+                    .clip(CircleShape)
+                    .align(Alignment.BottomStart)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text("Nombre de usuario", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+        Spacer(modifier = Modifier.height(4.dp))
+        Row {
+            Text("100 seguidores", fontSize = 14.sp)
+            Text(" | ", fontSize = 14.sp, color = Color.Gray)
+            Text("120 seguidos", fontSize = 14.sp)
+        }
+        Spacer(modifier = Modifier.height(4.dp))
+        Text("Descripción", fontSize = 14.sp, color = Color.Gray)
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // El botón "Seguir" parece que tenía un padding incorrecto, lo ajusté para que ocupe todo el ancho.
+        Button(
+            onClick = { /* Acción de seguir */ },
+            modifier = Modifier.padding(16.dp),
+            shape = MaterialTheme.shapes.small,
+            colors = ButtonDefaults.buttonColors(containerColor = Color.LightGray),
+            elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
+        ) {
+            Icon(Icons.Default.Add, contentDescription = null, tint = Color.Black)
+            Text("Seguir", color = Color.Black)
+        }
+    }
+}
+
+@Composable
+fun ImageGrid(
+    onPostOptionsClick: (Int) -> Unit,
+    expandedMenuIndex: Int?,
+    onDismissMenu: () -> Unit
+) {
+    val posts = (0..8).toList()
+
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(3),
+        modifier = Modifier.padding(top = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(2.dp),
+        verticalArrangement = Arrangement.spacedBy(2.dp)
+    ) {
+        itemsIndexed(posts) { index, _ ->
+            Box(
+                modifier = Modifier
+                    .aspectRatio(1f)
+                    .background(Color.LightGray)
             ) {
-                // Botón Eliminar publicación con borde
-                OutlinedButton(
-                    onClick = { /* TODO: Lógica para eliminar */ },
-                    shape = MaterialTheme.shapes.medium,
-                    border = BorderStroke(1.dp, Color.Gray),
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text("Eliminar publicación", color = Color.Black)
-                }
+                Image(
 
-                // Botón Actualizar cambios
-                Button(
-                    onClick = { /* TODO: Lógica para actualizar */ },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFFE0E0E0), // Gris claro
-                        contentColor = Color.Gray // Texto gris oscuro
-                    ),
-                    shape = MaterialTheme.shapes.medium,
-                    modifier = Modifier.weight(1f)
+                    painter = painterResource(id = R.drawable.post_image),
+                    contentDescription = "Publicación $index",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
+                )
+                if (expandedMenuIndex == index) {
+                    PostContextMenu(onDismiss = onDismissMenu)
+                }
+                IconButton(
+                    onClick = { onPostOptionsClick(index) },
+                    modifier = Modifier.align(Alignment.TopEnd)
                 ) {
-                    Text("Actualizar cambios")
+                    Icon(Icons.Default.MoreVert, "Opciones", tint = Color.White)
                 }
             }
         }
     }
 }
 
-@Preview(showBackground = true, device = "id:pixel_6")
 @Composable
-fun EditPostScreenPreview() {
-    DemoTheme {
-        EditPostScreen()
+fun PostContextMenu(onDismiss: () -> Unit) {
+    DropdownMenu(
+        expanded = true,
+        onDismissRequest = onDismiss
+    ) {
+        DropdownMenuItem(
+            text = { Text("Editar publicación") },
+            onClick = { onDismiss() },
+            leadingIcon = { Icon(Icons.Default.Edit, null) }
+        )
+        DropdownMenuItem(
+            text = { Text("Revisar estadísticas") },
+            onClick = { onDismiss() },
+            leadingIcon = { Icon(Icons.Filled.Analytics, null) }
+        )
+        DropdownMenuItem(
+            text = { Text("Más...") },
+            onClick = { onDismiss() },
+            leadingIcon = { Icon(Icons.Default.Info, null) }
+        )
     }
+}
+
+@Composable
+fun ProfileBottomNavigationBar() {
+    NavigationBar {
+        NavigationBarItem(
+            selected = true,
+            onClick = {  },
+            icon = { Icon(Icons.Default.Home, "Inicio") }
+        )
+        NavigationBarItem(
+            selected = false,
+            onClick = {  },
+            icon = {
+                // El ícono de añadir estaba muy grande, lo ajusté a un tamaño más razonable.
+                Icon(Icons.Default.AddCircle, "Añadir",
+                    modifier = Modifier.size(40.dp))
+            }
+        )
+        NavigationBarItem(
+            selected = false,
+            onClick = {  },
+            icon = { Icon(Icons.Default.Person, "Perfil") }
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Vista Previa de Pantalla de Perfil")
+@Composable
+fun EditarPublicacionScreenPreview() {
+    EditarPublicacionScreen()
 }
