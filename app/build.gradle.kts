@@ -43,7 +43,6 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
-    implementation(libs.vision.internal.vkp)
 
     // --- CORRECCIONES AQUÍ ---
     // 1. Cambiamos la versión a una más estable y compatible

@@ -54,9 +54,8 @@ fun ProfileTopAppBar() {
     TopAppBar(
         title = {
             Image(
-                // ▼▼▼ ¡CORRECCIÓN 1! ▼▼▼
-                // Cambia 'logo_app' por el nombre de tu archivo de logo.
-                painter = painterResource(id = R.drawable.ic_launcher_background),
+
+                painter = painterResource(id = R.drawable.perfil), //Cambiar a LOGOOO
                 contentDescription = "Logo de la aplicación",
                 modifier = Modifier
                     .size(40.dp)
@@ -64,7 +63,7 @@ fun ProfileTopAppBar() {
             )
         },
         actions = {
-            IconButton(onClick = { /* Acción */ }) {
+            IconButton(onClick = {  }) {
                 Icon(Icons.Default.Menu, contentDescription = "Menú")
             }
         },
@@ -82,9 +81,8 @@ fun ProfileInfoSection() {
         ) {
             // Banner
             Image(
-                // ▼▼▼ ¡CORRECCIÓN 2! ▼▼▼
-                // Cambia 'banner_perfil' por el nombre de tu archivo de banner.
-                painter = painterResource(id = R.drawable.ic_launcher_background),
+
+                painter = painterResource(id = R.drawable.banner),
                 contentDescription = "Banner del perfil",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -95,9 +93,7 @@ fun ProfileInfoSection() {
 
             // Foto de Perfil
             Image(
-                // ▼▼▼ ¡CORRECCIÓN 3! ▼▼▼
-                // Cambia 'foto_perfil' por el nombre de tu archivo de foto de perfil.
-                painter = painterResource(id = R.drawable.ic_launcher_foreground),
+                painter = painterResource(id = R.drawable.perfil),
                 contentDescription = "Foto de perfil",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -124,7 +120,7 @@ fun ProfileInfoSection() {
         // El botón "Seguir" parece que tenía un padding incorrecto, lo ajusté para que ocupe todo el ancho.
         Button(
             onClick = { /* Acción de seguir */ },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.padding(16.dp),
             shape = MaterialTheme.shapes.small,
             colors = ButtonDefaults.buttonColors(containerColor = Color.LightGray),
             elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
@@ -156,11 +152,8 @@ fun ImageGrid(
                     .background(Color.LightGray)
             ) {
                 Image(
-                    // ▼▼▼ ¡CORRECCIÓN 4! ▼▼▼
-                    // Este es el más importante.
-                    // Cambia 'publicacion_ejemplo' por el nombre del archivo de imagen
-                    // que causaba el error (el que renombraste).
-                    painter = painterResource(id = R.drawable.ic_launcher_background),
+
+                    painter = painterResource(id = R.drawable.post_image),
                     contentDescription = "Publicación $index",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize()
