@@ -11,6 +11,9 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,7 +34,7 @@ import mx.edu.utez.demo.viewmodel.HomeViewModel
 fun HomeScreen(navController: NavController, viewModel: HomeViewModel = viewModel()) {
     val posts by viewModel.posts.collectAsStateWithLifecycle()
     Scaffold(
-        topBar = { ProfileTopAppBar1() },
+        topBar = { ProfileTopAppBar1(navController) },
         bottomBar = { ProfileBottomNavigationBar1(navController) }
     ) { innerPadding ->
         Column(
@@ -49,7 +52,9 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel = viewMode
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileTopAppBar1() {
+fun ProfileTopAppBar1(navController: NavController) {
+    var expanded by remember { mutableStateOf(false) } // Estado para controlar el DropdownMenu
+
     TopAppBar(
         title = {
             Image(
@@ -61,13 +66,28 @@ fun ProfileTopAppBar1() {
             )
         },
         actions = {
-            IconButton(onClick = { }) {
+            IconButton(onClick = { expanded = !expanded }) { // Abre y cierra el menú al hacer clic
                 Icon(Icons.Default.Menu, contentDescription = "Menú")
+            }
+            // Menú desplegable
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false } // Cierra el menú cuando se hace clic fuera
+            ) {
+                // Opción para cerrar sesión
+                DropdownMenuItem(
+                    text = { Text("Cerrar sesión") },
+                    onClick = {
+                        expanded = false
+                        navController.navigate("login") // Navega a la pantalla de login
+                    }
+                )
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
     )
 }
+
 
 @Composable
 fun ProfileBottomNavigationBar1(navController: NavController) {

@@ -34,7 +34,7 @@ fun PerfilScreen (viewModel: PerfilViewModel, navController: NavController) {
     var expandedMenuIndex by remember { mutableStateOf<Int?>(null) }
 
     Scaffold(
-        topBar = { ProfileTopAppBar() },
+        topBar = { ProfileTopAppBar(navController) },
         bottomBar = { ProfileBottomNavigationBar(navController) }
     ) { innerPadding ->
         Column(
@@ -54,12 +54,13 @@ fun PerfilScreen (viewModel: PerfilViewModel, navController: NavController) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileTopAppBar() {
+fun ProfileTopAppBar(navController: NavController) {
+    var expanded by remember { mutableStateOf(false) } // Estado para controlar el DropdownMenu
+
     TopAppBar(
         title = {
             Image(
-
-                painter = painterResource(id = R.drawable.logoapp), //Cambiar a LOGOOO
+                painter = painterResource(id = R.drawable.logoapp), // Cambia esto por tu logo
                 contentDescription = "Logo de la aplicación",
                 modifier = Modifier
                     .size(40.dp)
@@ -67,8 +68,22 @@ fun ProfileTopAppBar() {
             )
         },
         actions = {
-            IconButton(onClick = {  }) {
+            IconButton(onClick = { expanded = !expanded }) { // Abre y cierra el menú al hacer clic
                 Icon(Icons.Default.Menu, contentDescription = "Menú")
+            }
+            // Menú desplegable
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false } // Cierra el menú cuando se hace clic fuera
+            ) {
+                // Opción para cerrar sesión
+                DropdownMenuItem(
+                    text = { Text("Cerrar sesión") },
+                    onClick = {
+                        expanded = false
+                        navController.navigate("login") // Navega a la pantalla de login
+                    }
+                )
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
