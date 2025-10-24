@@ -48,7 +48,7 @@ fun PostCard(post: Post) {
             Image(
                 painter = painterResource(id = post.imageRes), // Replace with the actual image resource
                 contentDescription = "Post image",
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.size(180.dp)
             )
 
             Spacer(modifier = Modifier.height(8.dp))
