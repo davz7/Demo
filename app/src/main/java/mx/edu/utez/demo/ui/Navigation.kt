@@ -8,27 +8,34 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost // Import necesario
 import androidx.navigation.compose.composable // Import necesario
 import androidx.navigation.compose.rememberNavController
+import mx.edu.utez.demo.ui.screens.CrearContrasenaScreen
+import mx.edu.utez.demo.ui.screens.CrearCuentaScreen
 import mx.edu.utez.demo.ui.screens.VerificarCodigoScreen // Import de tu pantalla
 
 @Composable
-fun Navigation() { // Usaremos esta función para encapsular el controlador de navegación
+fun Navigation() {
 
-    // 1. Crear el controlador de navegación
+
     val navController = rememberNavController()
 
-    // 2. Definir el NavHost
-    NavHost(
-        navController = navController, // Pasamos el controlador creado
-        startDestination = "verificar_codigo", // Define la ruta inicial
-        modifier = Modifier // Es buena práctica pasar un modifier, aunque sea vacío
+
+    NavHost(navController = navController,startDestination = "verificar_codigo",
+        modifier = Modifier
     ) {
-        // 3. Definir la ruta "verificar_codigo"
         composable("verificar_codigo") {
-            // 4. Llamar a la pantalla composable dentro del lambda
+            // Llamar a la pantalla composable dentro del lambda
             VerificarCodigoScreen(navController = navController)
         }
+        composable("crearContra") {
+            // Llamar a la pantalla composable dentro del lambda
+            CrearContrasenaScreen(navController = navController)
+        }
+        composable("crearCuenta") {
+            // Llamar a la pantalla composable dentro del lambda
+            CrearCuentaScreen(navController = navController)
+        }
 
-        // Aquí irían otras rutas como "login", "home", etc.
-        // composable("login") { LoginScreen(navController) }
+
+
     }
 }

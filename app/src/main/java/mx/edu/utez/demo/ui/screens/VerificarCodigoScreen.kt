@@ -51,7 +51,7 @@ fun VerificarCodigoScreen(
         Spacer(Modifier.height(48.dp))
 
 
-        // --- Componente de Cajas de Entrada (Reutilizable) ---
+        // --- Componente de Cajas de Entrada  ---
         CodeInputBoxes(
             code = code,
             onCodeChange = viewModel::updateCode,
@@ -74,13 +74,13 @@ fun VerificarCodigoScreen(
                 // Mensaje de éxito y lógica de navegación
                 Text("Código verificado correctamente.", color = Color.Green, modifier = Modifier.padding(8.dp))
                 // TODO: Aquí deberías navegar al siguiente destino
-                // navController.navigate("home_screen")
+                navController.navigate("crearContra")
             }
             else -> Spacer(Modifier.height(40.dp)) // Espacio si no hay mensaje
         }
 
 
-        // --- Botón de Verificación (Reutilizable) ---
+        // --- Botón de Verificación  ---
         PrimaryButton(
             text = when (verificationState) {
                 VerificationState.Loading -> "Verificando..."
