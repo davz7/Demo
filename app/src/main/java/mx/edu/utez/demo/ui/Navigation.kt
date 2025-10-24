@@ -8,17 +8,19 @@ import androidx.navigation.compose.composable // Import necesario
 import androidx.navigation.compose.rememberNavController
 import mx.edu.utez.demo.ui.screens.CrearContrasenaScreen
 import mx.edu.utez.demo.ui.screens.CrearCuentaScreen
+import mx.edu.utez.demo.ui.screens.HomeScreen
+import mx.edu.utez.demo.ui.screens.EditarPublicacionScreen
+import mx.edu.utez.demo.ui.screens.CrearPublicacionScreen
 import mx.edu.utez.demo.ui.screens.LoginScreen
 import mx.edu.utez.demo.ui.screens.RecuperarContrasenaScreen
 import mx.edu.utez.demo.ui.screens.VerificarCodigoScreen // Import de tu pantalla
 import mx.edu.utez.demo.viewmodel.LoginViewModel
+import kotlin.js.ExperimentalJsFileName
 
 @Composable
 fun Navigation() {
 
-
     val navController = rememberNavController()
-
 
     NavHost(navController = navController,startDestination = "login",
         modifier = Modifier
@@ -43,8 +45,22 @@ fun Navigation() {
             // Llamar a la pantalla composable dentro del lambda
             CrearCuentaScreen(navController = navController)
         }
+        composable("home") {
+            // Llamar a la pantalla composable dentro del lambda
+            HomeScreen(navController = navController)
+        }
+        composable("perfil") {
+            // Llamar a la pantalla composable dentro del lambda
+            EditarPublicacionScreen(navController = navController)
+        }
+        composable("crear") {
+            // Llamar a la pantalla composable dentro del lambda
+            CrearPublicacionScreen(navController = navController)
+        }
+
 
 
 
     }
 }
+

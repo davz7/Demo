@@ -23,16 +23,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.android.libraries.intelligence.acceleration.Analytics
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import mx.edu.utez.demo.R
 
 @Composable
-fun EditarPublicacionScreen() {
+fun EditarPublicacionScreen(navController: NavController) {
     var expandedMenuIndex by remember { mutableStateOf<Int?>(null) }
 
     Scaffold(
         topBar = { ProfileTopAppBar() },
-        bottomBar = { ProfileBottomNavigationBar() }
+        bottomBar = { ProfileBottomNavigationBar(navController) } // Pass navController here
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -56,7 +57,7 @@ fun ProfileTopAppBar() {
         title = {
             Image(
 
-                painter = painterResource(id = R.drawable.perfil), //Cambiar a LOGOOO
+                painter = painterResource(id = R.drawable.logoapp), //Cambiar a LOGOOO
                 contentDescription = "Logo de la aplicación",
                 modifier = Modifier
                     .size(40.dp)
@@ -198,25 +199,23 @@ fun PostContextMenu(onDismiss: () -> Unit) {
 }
 
 @Composable
-fun ProfileBottomNavigationBar() {
+fun ProfileBottomNavigationBar(navController: NavController) {
     NavigationBar {
         NavigationBarItem(
-            selected = true,
-            onClick = {  },
+            selected = false,
+            onClick = { navController.navigate("home") }, // Navigate to home
             icon = { Icon(Icons.Default.Home, "Inicio") }
         )
         NavigationBarItem(
             selected = false,
-            onClick = {  },
+            onClick = { navController.navigate("crear") }, // Navigate to "crear"
             icon = {
-                // El ícono de añadir estaba muy grande, lo ajusté a un tamaño más razonable.
-                Icon(Icons.Default.AddCircle, "Añadir",
-                    modifier = Modifier.size(40.dp))
+                Icon(Icons.Default.AddCircle, "Añadir", modifier = Modifier.size(40.dp))
             }
         )
         NavigationBarItem(
-            selected = false,
-            onClick = {  },
+            selected = true,
+            onClick = { }, //
             icon = { Icon(Icons.Default.Person, "Perfil") }
         )
     }
@@ -225,5 +224,5 @@ fun ProfileBottomNavigationBar() {
 @Preview(showBackground = true, name = "Vista Previa de Pantalla de Perfil")
 @Composable
 fun EditarPublicacionScreenPreview() {
-    EditarPublicacionScreen()
+    EditarPublicacionScreen(navController = rememberNavController())
 }

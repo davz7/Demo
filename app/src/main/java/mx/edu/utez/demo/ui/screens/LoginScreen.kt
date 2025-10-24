@@ -35,7 +35,7 @@ fun LoginScreen(viewModel: LoginViewModel, navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterVertically)
     ) {
-        CircularImage(R.drawable.usuario)
+        CircularImage(R.drawable.logoapp)
         Title("Bark")
 
         UserInputField(
@@ -62,7 +62,7 @@ fun LoginScreen(viewModel: LoginViewModel, navController: NavController) {
 
         PrimaryButton("Iniciar sesión") {
             viewModel.login {
-                navController.navigate("menu") {
+                navController.navigate("home") {
                     popUpTo("login") { inclusive = true } // Evita volver al login
                 }
             }
