@@ -13,7 +13,7 @@ class RecuperarContrasenaViewModel: ViewModel() {
             loginError.value = ""
             onSuccess()
         } else {
-            loginError.value = "Usuario o contraseña incorrectos"
+            loginError.value = "Ingresa un correo válido"
         }
     }
 

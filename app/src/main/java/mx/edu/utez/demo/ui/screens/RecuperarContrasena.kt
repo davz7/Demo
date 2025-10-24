@@ -9,17 +9,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import mx.edu.utez.demo.ui.components.buttons.SecondaryButton
 import mx.edu.utez.calculadoramvvm.ui.components.images.CircularImage
 import mx.edu.utez.demo.R
 import mx.edu.utez.demo.viewmodel.RecuperarContrasenaViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.material3.*
 import mx.edu.utez.demo.ui.components.inputsimport.CorreoInputField
-import mx.edu.utez.demo.ui.components.inputsimport.UserInputField
+import mx.edu.utez.demo.ui.components.textsimport.Title
 
 @Composable
 fun RecuperarContrasena(viewModel: RecuperarContrasenaViewModel, navController: NavController) {
@@ -27,16 +25,16 @@ fun RecuperarContrasena(viewModel: RecuperarContrasenaViewModel, navController: 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = 5.dp, start = 10.dp, end = 10.dp),
+            .padding(top =200.dp, start = 10.dp, end = 10.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+
     ) {
-        Text(
+        Title(
             text = "Recuperar Contraseña",
             color = Color.Black,
-            modifier = Modifier.padding(bottom = 16.dp),
-            fontSize = 20.dp.value.sp
+            modifier = Modifier.padding(bottom = 16.dp)
         )
+        Spacer(modifier = Modifier.height(24.dp))
 
         CircularImage(R.drawable.usuario)
 
@@ -58,7 +56,11 @@ fun RecuperarContrasena(viewModel: RecuperarContrasenaViewModel, navController: 
         Spacer(modifier = Modifier.height(16.dp))
 
         SecondaryButton("Enviar código") {
-            navController.navigate("login")
+            viewModel.login {
+                navController.navigate("login") {
+
+                }
+            }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
