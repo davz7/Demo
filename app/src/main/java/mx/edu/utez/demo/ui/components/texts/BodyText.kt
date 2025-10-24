@@ -10,8 +10,3 @@ fun BodyText(text: String) {
     Text(text = text, fontSize = 18.sp)
 }
 
-@Preview
-@Composable
-fun PreviewBodyText() {
-    BodyText("Por favor ingrese el código enviado al correo")
-}

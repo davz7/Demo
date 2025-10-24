@@ -41,7 +41,7 @@ class CrearCuentaViewModel : ViewModel() {
         val currentPassword = _password.value
         val currentUsername = _username.value
 
-        // Validación Hardcodeada (Mínima)
+        // Validación "simulada"
         if (currentEmail.isBlank() || currentPassword.isBlank() || currentUsername.isBlank()) {
             _uiState.value = UiState.Error("Todos los campos son obligatorios.")
             return

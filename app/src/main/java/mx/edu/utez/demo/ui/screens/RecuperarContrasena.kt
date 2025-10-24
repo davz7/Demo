@@ -12,7 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import mx.edu.utez.demo.ui.components.buttons.PrimaryButton
-import mx.edu.utez.demo.ui.components.buttons.SecondaryButton
 
 //Recuperar Contraseña Screen
 
@@ -27,7 +26,7 @@ fun RecuperarContrasenaScreen(navController: NavController) {
     ) {
         Text("Pantalla de Recuperación de Contraseña")
         Spacer(modifier = Modifier.height(16.dp))
-        SecondaryButton ("Volver al Login") {
+        PrimaryButton ("Volver al Login") {
             navController.popBackStack()
         }
     }

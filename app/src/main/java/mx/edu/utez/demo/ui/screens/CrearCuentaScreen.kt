@@ -13,7 +13,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import mx.edu.utez.demo.ui.components.buttons.PrimaryButton
+import mx.edu.utez.demo.ui.components.buttons.AccionButton
 import mx.edu.utez.demo.viewmodel.CrearCuentaViewModel
 
 @Composable
@@ -96,7 +96,7 @@ fun CrearCuentaScreen(
         }
 
         // --- Botón Crear Cuenta ---
-        PrimaryButton(
+        AccionButton(
             text = if (uiState == CrearCuentaViewModel.UiState.Loading) "Registrando..." else "Crear cuenta",
             onClick = viewModel::registerAccount,
             enabled = email.isNotBlank() && password.isNotBlank() && username.isNotBlank() && uiState != CrearCuentaViewModel.UiState.Loading

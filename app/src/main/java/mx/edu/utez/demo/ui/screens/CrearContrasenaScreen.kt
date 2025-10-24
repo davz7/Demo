@@ -9,7 +9,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import mx.edu.utez.demo.ui.components.buttons.PrimaryButton
+import mx.edu.utez.demo.ui.components.buttons.AccionButton
 import mx.edu.utez.demo.viewmodel.CrearContrasenaViewModel
 
 @Composable
@@ -79,7 +79,7 @@ fun CrearContrasenaScreen(
         }
 
         // --- Botón ---
-        PrimaryButton(
+        AccionButton(
             text = if (uiState == CrearContrasenaViewModel.UiState.Loading) "Cambiando..." else "Cambiar contraseña",
             onClick = viewModel::changePassword,
             enabled = password.isNotBlank() && confirmPassword.isNotBlank() && uiState != CrearContrasenaViewModel.UiState.Loading

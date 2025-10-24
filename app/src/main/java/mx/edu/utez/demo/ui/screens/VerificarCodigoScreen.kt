@@ -15,7 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import mx.edu.utez.demo.ui.components.buttons.PrimaryButton
+import mx.edu.utez.demo.ui.components.buttons.AccionButton
 
 import mx.edu.utez.demo.ui.components.inputs.CodeInputBoxes
 import mx.edu.utez.demo.viewmodel.VerificationState
@@ -80,7 +80,7 @@ fun VerificarCodigoScreen(
 
 
         // --- Botón de Verificación  ---
-        PrimaryButton(
+        AccionButton(
             text = when (verificationState) {
                 VerificationState.Loading -> "Verificando..."
                 else -> "Verificar"

@@ -16,7 +16,7 @@ import mx.edu.utez.demo.R
 import mx.edu.utez.calculadoramvvm.ui.components.images.CircularImage
 import mx.edu.utez.calculadoramvvm.ui.components.inputs.PasswordField
 import mx.edu.utez.calculadoramvvm.ui.components.texts.Link
-import mx.edu.utez.demo.ui.components.buttons.SecondaryButton
+import mx.edu.utez.demo.ui.components.buttons.PrimaryButton
 import mx.edu.utez.demo.ui.components.inputsimport.UserInputField
 import mx.edu.utez.demo.ui.components.textsimport.Title
 import mx.edu.utez.demo.viewmodel.LoginViewModel
@@ -60,7 +60,7 @@ fun LoginScreen(viewModel: LoginViewModel, navController: NavController) {
             navController.navigate("forgot_password")
         }
 
-        SecondaryButton("Iniciar sesión") {
+        PrimaryButton("Iniciar sesión") {
             viewModel.login {
                 navController.navigate("menu") {
                     popUpTo("login") { inclusive = true } // Evita volver al login
