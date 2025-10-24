@@ -12,9 +12,10 @@ import mx.edu.utez.demo.ui.screens.HomeScreen
 import mx.edu.utez.demo.ui.screens.EditarPublicacionScreen
 import mx.edu.utez.demo.ui.screens.CrearPublicacionScreen
 import mx.edu.utez.demo.ui.screens.LoginScreen
-import mx.edu.utez.demo.ui.screens.RecuperarContrasenaScreen
+import mx.edu.utez.demo.ui.screens.RecuperarContrasena
 import mx.edu.utez.demo.ui.screens.VerificarCodigoScreen // Import de tu pantalla
 import mx.edu.utez.demo.viewmodel.LoginViewModel
+import mx.edu.utez.demo.viewmodel.RecuperarContrasenaViewModel
 import kotlin.js.ExperimentalJsFileName
 
 @Composable
@@ -31,7 +32,8 @@ fun Navigation() {
             LoginScreen(navController = navController, viewModel = viewModel)
         }
         composable("forgot_password") {
-            RecuperarContrasenaScreen(navController)
+            val viewModel: RecuperarContrasenaViewModel = viewModel()
+            RecuperarContrasena(navController = navController, viewModel = viewModel)
         }
         composable("verificar_codigo") {
             // Llamar a la pantalla composable dentro del lambda

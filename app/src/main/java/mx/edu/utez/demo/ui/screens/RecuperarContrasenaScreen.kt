@@ -11,11 +11,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import mx.edu.utez.demo.ui.components.buttons.SecondaryButton
 import mx.edu.utez.calculadoramvvm.ui.components.images.CircularImage
 import mx.edu.utez.demo.R
 import mx.edu.utez.demo.viewmodel.RecuperarContrasenaViewModel
 import androidx.compose.material3.*
+import mx.edu.utez.demo.ui.components.buttons.PrimaryButton
 import mx.edu.utez.demo.ui.components.inputsimport.CorreoInputField
 import mx.edu.utez.demo.ui.components.textsimport.Title
 
@@ -55,7 +55,7 @@ fun RecuperarContrasena(viewModel: RecuperarContrasenaViewModel, navController: 
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        SecondaryButton("Enviar código") {
+        PrimaryButton ("Enviar código") {
             viewModel.login {
                 navController.navigate("login") {
 
@@ -65,7 +65,7 @@ fun RecuperarContrasena(viewModel: RecuperarContrasenaViewModel, navController: 
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        SecondaryButton("Volver al Login") {
+        PrimaryButton ("Volver al Login") {
             navController.popBackStack()
         }
     }
