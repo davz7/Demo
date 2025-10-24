@@ -34,7 +34,7 @@ fun EditPostScreen() {
             TopAppBar(
                 title = { Text("Cancelar Edición", fontWeight = FontWeight.Normal) },
                 navigationIcon = {
-                    IconButton(onClick = { /* TODO: Navegar hacia atrás */ }) {
+                    IconButton(onClick = {  }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Volver")
                     }
                 },
@@ -54,9 +54,7 @@ fun EditPostScreen() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            // Contenido superior
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                // Sección de la imagen
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -73,7 +71,7 @@ fun EditPostScreen() {
                     )
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Button(
-                            onClick = { /* TODO: Lógica para subir imagen */ },
+                            onClick = { },
                             colors = ButtonDefaults.buttonColors(containerColor = Color.White),
                             shape = MaterialTheme.shapes.medium,
                             border = BorderStroke(1.dp, Color.Gray)
@@ -82,7 +80,7 @@ fun EditPostScreen() {
                         }
                         Spacer(modifier = Modifier.height(8.dp))
                         Button(
-                            onClick = { /* TODO: Lógica para tomar foto */ },
+                            onClick = { },
                             colors = ButtonDefaults.buttonColors(containerColor = Color.White),
                             shape = MaterialTheme.shapes.medium,
                             border = BorderStroke(1.dp, Color.Gray)
@@ -94,7 +92,6 @@ fun EditPostScreen() {
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // Campos de texto para editar
                 OutlinedTextField(
                     value = title,
                     onValueChange = { title = it },
@@ -116,15 +113,13 @@ fun EditPostScreen() {
                 )
             }
 
-            // Botones de acción inferiores
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Botón Eliminar publicación con borde
                 OutlinedButton(
-                    onClick = { /* TODO: Lógica para eliminar */ },
+                    onClick = { },
                     shape = MaterialTheme.shapes.medium,
                     border = BorderStroke(1.dp, Color.Gray),
                     modifier = Modifier.weight(1f)
@@ -132,12 +127,11 @@ fun EditPostScreen() {
                     Text("Eliminar publicación", color = Color.Black)
                 }
 
-                // Botón Actualizar cambios
                 Button(
-                    onClick = { /* TODO: Lógica para actualizar */ },
+                    onClick = { },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFFE0E0E0), // Gris claro
-                        contentColor = Color.Gray // Texto gris oscuro
+                        containerColor = Color(0xFFE0E0E0),
+                        contentColor = Color.Gray
                     ),
                     shape = MaterialTheme.shapes.medium,
                     modifier = Modifier.weight(1f)
