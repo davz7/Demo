@@ -1,2 +1,235 @@
 package mx.edu.utez.demo.ui.screens
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import mx.edu.utez.demo.R
+
+@Composable
+fun EditarPublicacionScreen() {
+    var expandedMenuIndex by remember { mutableStateOf<Int?>(null) }
+
+    Scaffold(
+        topBar = { ProfileTopAppBar() },
+        bottomBar = { ProfileBottomNavigationBar() }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize()
+        ) {
+            ProfileInfoSection()
+            ImageGrid(
+                onPostOptionsClick = { index -> expandedMenuIndex = index },
+                expandedMenuIndex = expandedMenuIndex,
+                onDismissMenu = { expandedMenuIndex = null }
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ProfileTopAppBar() {
+    TopAppBar(
+        title = {
+            Image(
+                // ▼▼▼ ¡CORRECCIÓN 1! ▼▼▼
+                // Cambia 'logo_app' por el nombre de tu archivo de logo.
+                painter = painterResource(id = R.drawable.ic_launcher_background),
+                contentDescription = "Logo de la aplicación",
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(CircleShape)
+            )
+        },
+        actions = {
+            IconButton(onClick = { /* Acción */ }) {
+                Icon(Icons.Default.Menu, contentDescription = "Menú")
+            }
+        },
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+    )
+}
+
+@Composable
+fun ProfileInfoSection() {
+    Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(110.dp)
+        ) {
+            // Banner
+            Image(
+                // ▼▼▼ ¡CORRECCIÓN 2! ▼▼▼
+                // Cambia 'banner_perfil' por el nombre de tu archivo de banner.
+                painter = painterResource(id = R.drawable.ic_launcher_background),
+                contentDescription = "Banner del perfil",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(80.dp)
+                    .align(Alignment.BottomCenter)
+            )
+
+            // Foto de Perfil
+            Image(
+                // ▼▼▼ ¡CORRECCIÓN 3! ▼▼▼
+                // Cambia 'foto_perfil' por el nombre de tu archivo de foto de perfil.
+                painter = painterResource(id = R.drawable.ic_launcher_foreground),
+                contentDescription = "Foto de perfil",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(90.dp)
+                    .clip(CircleShape)
+                    .align(Alignment.BottomStart)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text("Nombre de usuario", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+        Spacer(modifier = Modifier.height(4.dp))
+        Row {
+            Text("100 seguidores", fontSize = 14.sp)
+            Text(" | ", fontSize = 14.sp, color = Color.Gray)
+            Text("120 seguidos", fontSize = 14.sp)
+        }
+        Spacer(modifier = Modifier.height(4.dp))
+        Text("Descripción", fontSize = 14.sp, color = Color.Gray)
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // El botón "Seguir" parece que tenía un padding incorrecto, lo ajusté para que ocupe todo el ancho.
+        Button(
+            onClick = { /* Acción de seguir */ },
+            modifier = Modifier.fillMaxWidth(),
+            shape = MaterialTheme.shapes.small,
+            colors = ButtonDefaults.buttonColors(containerColor = Color.LightGray),
+            elevation = ButtonDefaults.buttonElevation(defaultElevation = 0.dp)
+        ) {
+            Icon(Icons.Default.Add, contentDescription = null, tint = Color.Black)
+            Text("Seguir", color = Color.Black)
+        }
+    }
+}
+
+@Composable
+fun ImageGrid(
+    onPostOptionsClick: (Int) -> Unit,
+    expandedMenuIndex: Int?,
+    onDismissMenu: () -> Unit
+) {
+    val posts = (0..8).toList()
+
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(3),
+        modifier = Modifier.padding(top = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(2.dp),
+        verticalArrangement = Arrangement.spacedBy(2.dp)
+    ) {
+        itemsIndexed(posts) { index, _ ->
+            Box(
+                modifier = Modifier
+                    .aspectRatio(1f)
+                    .background(Color.LightGray)
+            ) {
+                Image(
+                    // ▼▼▼ ¡CORRECCIÓN 4! ▼▼▼
+                    // Este es el más importante.
+                    // Cambia 'publicacion_ejemplo' por el nombre del archivo de imagen
+                    // que causaba el error (el que renombraste).
+                    painter = painterResource(id = R.drawable.ic_launcher_background),
+                    contentDescription = "Publicación $index",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
+                )
+                if (expandedMenuIndex == index) {
+                    PostContextMenu(onDismiss = onDismissMenu)
+                }
+                IconButton(
+                    onClick = { onPostOptionsClick(index) },
+                    modifier = Modifier.align(Alignment.TopEnd)
+                ) {
+                    Icon(Icons.Default.MoreVert, "Opciones", tint = Color.White)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun PostContextMenu(onDismiss: () -> Unit) {
+    DropdownMenu(
+        expanded = true,
+        onDismissRequest = onDismiss
+    ) {
+        DropdownMenuItem(
+            text = { Text("Editar publicación") },
+            onClick = { onDismiss() },
+            leadingIcon = { Icon(Icons.Default.Edit, null) }
+        )
+        DropdownMenuItem(
+            text = { Text("Revisar estadísticas") },
+            onClick = { onDismiss() },
+            leadingIcon = { Icon(Icons.Filled.Analytics, null) }
+        )
+        DropdownMenuItem(
+            text = { Text("Más...") },
+            onClick = { onDismiss() },
+            leadingIcon = { Icon(Icons.Default.Info, null) }
+        )
+    }
+}
+
+@Composable
+fun ProfileBottomNavigationBar() {
+    NavigationBar {
+        NavigationBarItem(
+            selected = true,
+            onClick = {  },
+            icon = { Icon(Icons.Default.Home, "Inicio") }
+        )
+        NavigationBarItem(
+            selected = false,
+            onClick = {  },
+            icon = {
+                // El ícono de añadir estaba muy grande, lo ajusté a un tamaño más razonable.
+                Icon(Icons.Default.AddCircle, "Añadir",
+                    modifier = Modifier.size(40.dp))
+            }
+        )
+        NavigationBarItem(
+            selected = false,
+            onClick = {  },
+            icon = { Icon(Icons.Default.Person, "Perfil") }
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Vista Previa de Pantalla de Perfil")
+@Composable
+fun EditarPublicacionScreenPreview() {
+    EditarPublicacionScreen()
+}
