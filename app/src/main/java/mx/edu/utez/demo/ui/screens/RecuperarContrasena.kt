@@ -11,7 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import mx.edu.utez.demo.ui.components.buttonsimport.PrimaryButton
+import mx.edu.utez.demo.ui.components.buttons.PrimaryButton
 
 //Recuperar Contraseña Screen
 

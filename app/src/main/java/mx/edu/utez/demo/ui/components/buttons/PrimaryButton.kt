@@ -1,6 +1,6 @@
 // PrimaryButton.kt
 
-package mx.edu.utez.demo.ui.components.buttons // Ajusta tu paquete si es necesario
+package mx.edu.utez.demo.ui.components.buttons
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,7 +22,7 @@ fun PrimaryButton(
 ) {
     Button(
         onClick = onClick,
-        enabled = enabled, // ¡Aquí se usa el parámetro 'enabled'!
+        enabled = enabled,
         modifier = Modifier
             .fillMaxWidth()
             .height(48.dp),
