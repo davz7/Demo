@@ -59,7 +59,7 @@ fun ProfileTopAppBar() {
         title = {
             Image(
 
-                painter = painterResource(id = R.drawable.perfil), //Cambiar a LOGOOO
+                painter = painterResource(id = R.drawable.logoapp), //Cambiar a LOGOOO
                 contentDescription = "Logo de la aplicación",
                 modifier = Modifier
                     .size(40.dp)

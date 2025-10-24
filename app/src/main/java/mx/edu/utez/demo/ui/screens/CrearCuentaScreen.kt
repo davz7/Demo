@@ -1,18 +1,23 @@
 package mx.edu.utez.demo.ui.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import mx.edu.utez.demo.R
 import mx.edu.utez.demo.ui.components.buttons.AccionButton
 import mx.edu.utez.demo.viewmodel.CrearCuentaViewModel
 
@@ -27,6 +32,16 @@ fun CrearCuentaScreen(
     val username by viewModel.username.collectAsState()
     val uiState by viewModel.uiState.collectAsState()
 
+    // Control de navegación después del éxito
+    LaunchedEffect(uiState) {
+        if (uiState == CrearCuentaViewModel.UiState.Success) {
+            // Navega a la pantalla de inicio de sesión o principal
+            navController.navigate("login") {
+                // Limpia la pila para que no pueda volver a esta pantalla
+                popUpTo(navController.graph.id) { inclusive = true }
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -34,15 +49,21 @@ fun CrearCuentaScreen(
             .padding(horizontal = 32.dp, vertical = 64.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // --- LOGO Placeholder ---
-        // Aquí iría tu componente de Logo (ej. CircularImage)
+
         Box(
             modifier = Modifier
                 .size(120.dp)
                 .padding(bottom = 32.dp),
             contentAlignment = Alignment.Center
         ) {
-            Text("LOGO", style = MaterialTheme.typography.headlineMedium)
+            Image(
+
+                painter = painterResource(id = R.drawable.logoapp), //Cambiar a LOGOOO
+                contentDescription = "Logo de la aplicación",
+                modifier = Modifier
+                    .size(80.dp)
+                    .clip(CircleShape)
+            )
         }
 
         // --- Título/Instrucción ---
