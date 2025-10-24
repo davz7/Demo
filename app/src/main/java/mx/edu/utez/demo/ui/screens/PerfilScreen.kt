@@ -59,7 +59,7 @@ fun ProfileTopAppBar() {
         title = {
             Image(
 
-                painter = painterResource(id = R.drawable.logoapp), //Cambiar a LOGOOO
+                painter = painterResource(id = R.drawable.logoapp),
                 contentDescription = "Logo de la aplicación",
                 modifier = Modifier
                     .size(40.dp)
@@ -95,7 +95,6 @@ fun ProfileInfoSection() {
                     .align(Alignment.BottomCenter)
             )
 
-            // Foto de Perfil
             Image(
                 painter = painterResource(id = R.drawable.perfil),
                 contentDescription = "Foto de perfil",
@@ -121,9 +120,8 @@ fun ProfileInfoSection() {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // El botón "Seguir" parece que tenía un padding incorrecto, lo ajusté para que ocupe todo el ancho.
         Button(
-            onClick = { /* Acción de seguir */ },
+            onClick = { },
             modifier = Modifier.padding(16.dp),
             shape = MaterialTheme.shapes.small,
             colors = ButtonDefaults.buttonColors(containerColor = Color.LightGray),
