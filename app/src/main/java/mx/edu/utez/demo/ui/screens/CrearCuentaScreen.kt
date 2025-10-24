@@ -20,7 +20,7 @@ import mx.edu.utez.demo.viewmodel.CrearCuentaViewModel
 fun CrearCuentaScreen(
     navController: NavController,
     viewModel: CrearCuentaViewModel = viewModel(),
-    // Callback para la navegación al éxito (generalmente a la pantalla principal)
+
 ) {
     val email by viewModel.email.collectAsState()
     val password by viewModel.password.collectAsState()
@@ -115,8 +115,8 @@ fun CrearCuentaScreen(
                 color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.clickable {
-                    // TODO: Navegar a la pantalla de Login
-                    navController.navigate("login_screen")
+
+                    navController.navigate("login")
                 }
             )
         }

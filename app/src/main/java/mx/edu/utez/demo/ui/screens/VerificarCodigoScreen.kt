@@ -73,7 +73,6 @@ fun VerificarCodigoScreen(
             is VerificationState.Success -> {
                 // Mensaje de éxito y lógica de navegación
                 Text("Código verificado correctamente.", color = Color.Green, modifier = Modifier.padding(8.dp))
-                // TODO: Aquí deberías navegar al siguiente destino
                 navController.navigate("crearContra")
             }
             else -> Spacer(Modifier.height(40.dp)) // Espacio si no hay mensaje
