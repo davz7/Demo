@@ -186,7 +186,7 @@ fun ImageGrid(
                 ) {
                     Icon(Icons.Default.MoreVert, "Opciones", tint = Color.White)
                 }
-            }
+                 }
         }
     }
 }
