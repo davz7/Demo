@@ -25,7 +25,7 @@ fun RecuperarContrasena(viewModel: RecuperarContrasenaViewModel, navController: 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top =200.dp, start = 10.dp, end = 10.dp),
+            .padding(top =250.dp, start = 10.dp, end = 10.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
 
     ) {
