@@ -23,15 +23,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import mx.edu.utez.demo.R
+import mx.edu.utez.demo.viewmodel.LoginViewModel
+import mx.edu.utez.demo.viewmodel.PerfilViewModel
 
 @Composable
-fun EditarPublicacionScreen() {
+fun PerfilScreen (viewModel: PerfilViewModel, navController: NavController) {
     var expandedMenuIndex by remember { mutableStateOf<Int?>(null) }
 
     Scaffold(
         topBar = { ProfileTopAppBar() },
-        bottomBar = { ProfileBottomNavigationBar() }
+        bottomBar = { ProfileBottomNavigationBar(navController) }
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -197,16 +201,16 @@ fun PostContextMenu(onDismiss: () -> Unit) {
 }
 
 @Composable
-fun ProfileBottomNavigationBar() {
+fun ProfileBottomNavigationBar(navController: NavController) {
     NavigationBar {
         NavigationBarItem(
-            selected = true,
-            onClick = {  },
+            selected = false,
+            onClick = { navController.navigate("home")},
             icon = { Icon(Icons.Default.Home, "Inicio") }
         )
         NavigationBarItem(
             selected = false,
-            onClick = {  },
+            onClick = { navController.navigate("crear")},
             icon = {
                 // El ícono de añadir estaba muy grande, lo ajusté a un tamaño más razonable.
                 Icon(Icons.Default.AddCircle, "Añadir",
@@ -214,15 +218,11 @@ fun ProfileBottomNavigationBar() {
             }
         )
         NavigationBarItem(
-            selected = false,
+            selected = true,
             onClick = {  },
             icon = { Icon(Icons.Default.Person, "Perfil") }
         )
     }
 }
 
-@Preview(showBackground = true, name = "Vista Previa de Pantalla de Perfil")
-@Composable
-fun EditarPublicacionScreenPreview() {
-    EditarPublicacionScreen()
-}
+

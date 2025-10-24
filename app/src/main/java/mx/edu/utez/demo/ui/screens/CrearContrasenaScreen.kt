@@ -25,7 +25,7 @@ fun CrearContrasenaScreen(
     LaunchedEffect(uiState) {
         if (uiState == CrearContrasenaViewModel.UiState.Success) {
             // Navega a la pantalla de inicio de sesión o principal
-            navController.navigate("login_screen") {
+            navController.navigate("login") {
                 // Limpia la pila para que no pueda volver a esta pantalla
                 popUpTo(navController.graph.id) { inclusive = true }
             }

@@ -57,7 +57,7 @@ fun RecuperarContrasena(viewModel: RecuperarContrasenaViewModel, navController: 
 
         PrimaryButton ("Enviar código") {
             viewModel.login {
-                navController.navigate("login") {
+                navController.navigate("verificar_codigo") {
 
                 }
             }
