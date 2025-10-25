@@ -30,7 +30,7 @@ import mx.edu.utez.demo.viewmodel.LoginViewModel
 import mx.edu.utez.demo.viewmodel.PerfilViewModel
 
 @Composable
-fun PerfilScreen (viewModel: PerfilViewModel, navController: NavController) {
+fun PerfilScreen(viewModel: PerfilViewModel, navController: NavController) {
     var expandedMenuIndex by remember { mutableStateOf<Int?>(null) }
 
     Scaffold(
@@ -46,11 +46,13 @@ fun PerfilScreen (viewModel: PerfilViewModel, navController: NavController) {
             ImageGrid(
                 onPostOptionsClick = { index -> expandedMenuIndex = index },
                 expandedMenuIndex = expandedMenuIndex,
-                onDismissMenu = { expandedMenuIndex = null }
+                onDismissMenu = { expandedMenuIndex = null },
+                navController = navController // Pasamos el navController aquí
             )
         }
     }
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -154,7 +156,8 @@ fun ProfileInfoSection() {
 fun ImageGrid(
     onPostOptionsClick: (Int) -> Unit,
     expandedMenuIndex: Int?,
-    onDismissMenu: () -> Unit
+    onDismissMenu: () -> Unit,
+    navController: NavController // Asegúrate de pasar el navController
 ) {
     val posts = (0..8).toList()
 
@@ -171,14 +174,13 @@ fun ImageGrid(
                     .background(Color.LightGray)
             ) {
                 Image(
-
                     painter = painterResource(id = R.drawable.post_image),
                     contentDescription = "Publicación $index",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize()
                 )
                 if (expandedMenuIndex == index) {
-                    PostContextMenu(onDismiss = onDismissMenu)
+                    PostContextMenu(onDismiss = onDismissMenu, navController = navController) // Se pasa navController
                 }
                 IconButton(
                     onClick = { onPostOptionsClick(index) },
@@ -186,20 +188,27 @@ fun ImageGrid(
                 ) {
                     Icon(Icons.Default.MoreVert, "Opciones", tint = Color.White)
                 }
-                 }
+            }
         }
     }
 }
 
+
 @Composable
-fun PostContextMenu(onDismiss: () -> Unit) {
+fun PostContextMenu(
+    onDismiss: () -> Unit,
+    navController: NavController
+) {
     DropdownMenu(
         expanded = true,
         onDismissRequest = onDismiss
     ) {
         DropdownMenuItem(
             text = { Text("Editar publicación") },
-            onClick = { onDismiss() },
+            onClick = {
+                onDismiss()
+                navController.navigate("editar")
+            },
             leadingIcon = { Icon(Icons.Default.Edit, null) }
         )
         DropdownMenuItem(
@@ -214,6 +223,7 @@ fun PostContextMenu(onDismiss: () -> Unit) {
         )
     }
 }
+
 
 @Composable
 fun ProfileBottomNavigationBar(navController: NavController) {

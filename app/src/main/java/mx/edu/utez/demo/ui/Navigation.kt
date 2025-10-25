@@ -10,6 +10,7 @@ import mx.edu.utez.demo.ui.screens.CrearContrasenaScreen
 import mx.edu.utez.demo.ui.screens.CrearCuentaScreen
 import mx.edu.utez.demo.ui.screens.HomeScreen
 import mx.edu.utez.demo.ui.screens.CrearPublicacionScreen
+import mx.edu.utez.demo.ui.screens.EditPostScreen
 import mx.edu.utez.demo.ui.screens.LoginScreen
 import mx.edu.utez.demo.ui.screens.PerfilScreen
 import mx.edu.utez.demo.ui.screens.RecuperarContrasena
@@ -59,6 +60,10 @@ fun Navigation() {
         composable("crear") {
             // Llamar a la pantalla composable dentro del lambda
             CrearPublicacionScreen(navController = navController)
+        }
+        composable("editar") {
+            // Llamar a la pantalla composable dentro del lambda
+            EditPostScreen(navController = navController)
         }
 
 

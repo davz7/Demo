@@ -20,12 +20,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import mx.edu.utez.demo.R
 import mx.edu.utez.demo.ui.theme.DemoTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditPostScreen() {
+fun EditPostScreen(navController: NavController) {
     var title by remember { mutableStateOf(TextFieldValue("")) }
     var description by remember { mutableStateOf(TextFieldValue("")) }
 
@@ -119,16 +120,20 @@ fun EditPostScreen() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 OutlinedButton(
-                    onClick = { },
+                    onClick = {
+                        navController.navigate("perfil")},
                     shape = MaterialTheme.shapes.medium,
                     border = BorderStroke(1.dp, Color.Gray),
                     modifier = Modifier.weight(1f)
                 ) {
                     Text("Eliminar publicación", color = Color.Black)
+
                 }
 
                 Button(
-                    onClick = { },
+                    onClick = {
+                        navController.navigate("perfil")
+                    },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFFE0E0E0),
                         contentColor = Color.Gray
@@ -143,10 +148,3 @@ fun EditPostScreen() {
     }
 }
 
-@Preview(showBackground = true, device = "id:pixel_6")
-@Composable
-fun EditPostScreenPreview() {
-    DemoTheme {
-        EditPostScreen()
-    }
-}
