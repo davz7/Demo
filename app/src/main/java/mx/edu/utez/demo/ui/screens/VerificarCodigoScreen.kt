@@ -106,7 +106,7 @@ fun VerificarCodigoScreen(
                 color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.clickable {
-                    // TODO: Implementar la lógica de reenvío
+
                 }
             )
         }

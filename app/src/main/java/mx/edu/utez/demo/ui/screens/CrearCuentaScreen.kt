@@ -58,7 +58,7 @@ fun CrearCuentaScreen(
         ) {
             Image(
 
-                painter = painterResource(id = R.drawable.logoapp), //Cambiar a LOGOOO
+                painter = painterResource(id = R.drawable.logoapp),
                 contentDescription = "Logo de la aplicación",
                 modifier = Modifier
                     .size(80.dp)

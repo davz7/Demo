@@ -8,18 +8,18 @@ import kotlinx.coroutines.launch
 
 class VerificarCodigoViewModel : ViewModel() {
 
-    // 1. HARDCODE: El código correcto para la simulación
+
     private val CORRECT_CODE = "1234"
 
-    // 2. Estado del campo de texto (lo manejamos aquí para que el ViewModel lo valide)
+
     private val _code = MutableStateFlow("")
     val code: StateFlow<String> = _code
 
-    // 3. Estado de la UI (para mostrar spinners o mensajes)
+    //  Estado de la UI (para mostrar spinners o mensajes)
     private val _verificationState = MutableStateFlow<VerificationState>(VerificationState.Idle)
     val verificationState: StateFlow<VerificationState> = _verificationState
 
-    // 4. Lógica para actualizar el código de entrada
+    // Lógica para actualizar el código de entrada
     fun updateCode(newCode: String) {
         // Limitamos a 4 caracteres
         if (newCode.length <= 4) {
@@ -32,7 +32,7 @@ class VerificarCodigoViewModel : ViewModel() {
         }
     }
 
-    // 5. Lógica de verificación (simulada)
+    // Lógica de verificación (simulada)
     fun verifyCode() {
         // Verificación inicial de longitud
         if (_code.value.length != 4) {
@@ -40,14 +40,14 @@ class VerificarCodigoViewModel : ViewModel() {
             return
         }
 
-        // 5a. SIMULACIÓN DE CARGA (para mostrar un Spinner)
+        // SIMULACIÓN DE CARGA (para mostrar un Spinner)
         _verificationState.value = VerificationState.Loading
 
         viewModelScope.launch {
             // SIMULACIÓN DE RETARDO DE RED (2 segundos)
             delay(2000)
 
-            // 5b. LÓGICA HARDCODEADA: Comparar el código ingresado con el correcto
+            // LÓGICA HARDCODEADA: Comparar el código ingresado con el correcto
             if (_code.value == CORRECT_CODE) {
                 // SIMULACIÓN DE ÉXITO
                 _verificationState.value = VerificationState.Success
@@ -58,7 +58,7 @@ class VerificarCodigoViewModel : ViewModel() {
         }
     }
 
-    // 6. Función para resetear el estado después de una navegación o reintento
+    // Función para resetear el estado después de una navegación o reintento
     fun resetState() {
         _code.value = ""
         _verificationState.value = VerificationState.Idle

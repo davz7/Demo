@@ -50,7 +50,7 @@ fun CrearContrasenaScreen(
         Spacer(Modifier.height(48.dp))
 
         // --- Campo de Contraseña ---
-        OutlinedTextField( // O usa tu componente SimpleTextField
+        OutlinedTextField(
             value = password,
             onValueChange = viewModel::updatePassword,
             label = { Text("Ingresa tu contraseña") },
@@ -59,7 +59,7 @@ fun CrearContrasenaScreen(
         Spacer(Modifier.height(16.dp))
 
         // --- Campo de Confirmación ---
-        OutlinedTextField( // O usa tu componente SimpleTextField
+        OutlinedTextField(
             value = confirmPassword,
             onValueChange = viewModel::updateConfirmPassword,
             label = { Text("Confirma tu contraseña") },

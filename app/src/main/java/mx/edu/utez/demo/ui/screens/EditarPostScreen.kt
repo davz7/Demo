@@ -35,7 +35,7 @@ fun EditPostScreen(navController: NavController) {
             TopAppBar(
                 title = { Text("Cancelar Edición", fontWeight = FontWeight.Normal) },
                 navigationIcon = {
-                    IconButton(onClick = {  }) {
+                    IconButton(onClick = { navController.navigate("perfil") }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Volver")
                     }
                 },
