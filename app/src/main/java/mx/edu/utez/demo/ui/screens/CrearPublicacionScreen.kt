@@ -1,9 +1,13 @@
 package mx.edu.utez.demo.ui.screens
 
+import android.graphics.Bitmap
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -12,22 +16,67 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.rememberAsyncImagePainter
 import mx.edu.utez.demo.R
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import mx.edu.utez.demo.data.model.Post
+import java.io.File
+import java.io.FileOutputStream
+import java.text.SimpleDateFormat
+import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CrearPublicacionScreen(navController: NavHostController) {
+fun CrearPublicacionScreen(
+    navController: NavHostController,
+    postViewModel: mx.edu.utez.demo.viewmodel.PostViewModel = viewModel()
+) {
+    val context = LocalContext.current
+
     var title by remember { mutableStateOf(TextFieldValue("")) }
     var description by remember { mutableStateOf(TextFieldValue("")) }
+
+    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+    var photoBitmap by remember { mutableStateOf<Bitmap?>(null) }
+
+    // Función para guardar el bitmap tomado como archivo temporal
+    fun saveBitmapToCache(bitmap: Bitmap): Uri {
+        val file = File(context.cacheDir, "photo_${System.currentTimeMillis()}.jpg")
+        val stream = FileOutputStream(file)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+        stream.flush()
+        stream.close()
+        return Uri.fromFile(file)
+    }
+
+    // Galería
+    val galleryLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult = { uri -> selectedImageUri = uri; photoBitmap = null }
+    )
+
+    // Cámara
+    val cameraLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicturePreview(),
+        onResult = { bitmap ->
+            if (bitmap != null) {
+                photoBitmap = bitmap
+                selectedImageUri = null
+            }
+        }
+    )
 
     Scaffold(
         topBar = {
@@ -54,9 +103,8 @@ fun CrearPublicacionScreen(navController: NavHostController) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            // Contenido superior
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                // Sección de la imagen
+                // Imagen mostrada
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -65,26 +113,44 @@ fun CrearPublicacionScreen(navController: NavHostController) {
                         .background(Color.LightGray),
                     contentAlignment = Alignment.Center
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.perfil),
-                        contentDescription = "Imagen de la publicación",
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
-                    )
+                    when {
+                        photoBitmap != null -> Image(
+                            bitmap = photoBitmap!!.asImageBitmap(),
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop
+                        )
+                        selectedImageUri != null -> Image(
+                            painter = rememberAsyncImagePainter(selectedImageUri),
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop
+                        )
+                        else -> Image(
+                            painter = painterResource(id = R.drawable.perfil),
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop
+                        )
+                    }
+
+                    // Botones sobre la imagen
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Button(
-                            onClick = { },
+                            onClick = {
+                                galleryLauncher.launch(
+                                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                                )
+                            },
                             colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-                            shape = MaterialTheme.shapes.medium,
                             border = BorderStroke(1.dp, Color.Gray)
                         ) {
-                            Text("Subir desde galeria", color = Color.Black)
+                            Text("Subir desde galería", color = Color.Black)
                         }
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(Modifier.height(8.dp))
                         Button(
-                            onClick = {  },
+                            onClick = { cameraLauncher.launch(null) },
                             colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-                            shape = MaterialTheme.shapes.medium,
                             border = BorderStroke(1.dp, Color.Gray)
                         ) {
                             Text("Tomar foto o video", color = Color.Black)
@@ -92,9 +158,8 @@ fun CrearPublicacionScreen(navController: NavHostController) {
                     }
                 }
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(Modifier.height(24.dp))
 
-                // Campos de texto para editar
                 OutlinedTextField(
                     value = title,
                     onValueChange = { title = it },
@@ -103,7 +168,7 @@ fun CrearPublicacionScreen(navController: NavHostController) {
                     shape = MaterialTheme.shapes.medium
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(Modifier.height(16.dp))
 
                 OutlinedTextField(
                     value = description,
@@ -111,20 +176,17 @@ fun CrearPublicacionScreen(navController: NavHostController) {
                     label = { Text("Agregar descripción") },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(260.dp),
+                        .height(200.dp),
                     shape = MaterialTheme.shapes.medium
                 )
             }
 
-            // Botones de acción inferiores
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-                verticalAlignment = Alignment.CenterVertically
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                // Botón Cancelar publicación
                 OutlinedButton(
-                    onClick = { navController.navigate("home") },  // Navigate to Home
+                    onClick = { navController.navigate("home") },
                     shape = MaterialTheme.shapes.medium,
                     border = BorderStroke(1.dp, Color.Gray),
                     modifier = Modifier.weight(1f)
@@ -132,17 +194,45 @@ fun CrearPublicacionScreen(navController: NavHostController) {
                     Text("Cancelar publicación", color = Color.Black)
                 }
 
-                // Botón Publicar
+                // Botón Publicar con estilo moderno
                 Button(
-                    onClick = { navController.navigate("home") }, // Navigate to Home after publish
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFFE0E0E0), // Gris claro
-                        contentColor = Color.Gray // Texto gris oscuro
-                    ),
-                    shape = MaterialTheme.shapes.medium,
-                    modifier = Modifier.weight(1f)
+                    onClick = {
+                        if (title.text.isNotEmpty() && description.text.isNotEmpty()) {
+                            val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+                            val currentTime = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
+
+                            val imageUriString = when {
+                                photoBitmap != null -> saveBitmapToCache(photoBitmap!!).toString()
+                                selectedImageUri != null -> selectedImageUri.toString()
+                                else -> null
+                            }
+
+                            val post = Post(
+                                username = "Davor",
+                                title = title.text,
+                                description = description.text,
+                                date = currentDate,
+                                time = currentTime,
+                                imageUri = imageUriString,
+                                profileImageRes = R.drawable.usuario
+                            )
+
+                            postViewModel.insertar(post)
+                            navController.navigate("home")
+                        }
+                    },
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(50.dp)
+                        .background(
+                            Brush.horizontalGradient(
+                                colors = listOf(Color(0xFF00BCD4), Color(0xFF00BCD4))
+                            ),
+                            shape = MaterialTheme.shapes.large
+                        ),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
                 ) {
-                    Text("Publicar")
+                    Text("Publicar", color = Color.White, fontWeight = FontWeight.Bold)
                 }
             }
         }

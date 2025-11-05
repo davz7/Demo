@@ -3,6 +3,7 @@ package mx.edu.utez.demo.ui.screens
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,11 +17,12 @@ import mx.edu.utez.demo.ui.components.PostList
 import mx.edu.utez.demo.ui.components.buttons.BottomNavigationBar
 import mx.edu.utez.demo.ui.components.TopAppBar
 import mx.edu.utez.demo.viewmodel.HomeViewModel
+import mx.edu.utez.demo.viewmodel.PostViewModel
 
 
 @Composable
-fun HomeScreen(navController: NavController, viewModel: HomeViewModel = viewModel()) {
-    val posts by viewModel.posts.collectAsStateWithLifecycle()
+fun HomeScreen(navController: NavController, viewModel: PostViewModel = viewModel()) {
+    val posts by viewModel.postsFlow.collectAsState()
     Scaffold(
         topBar = { TopAppBar(navController) },
         bottomBar = { BottomNavigationBar(navController) }

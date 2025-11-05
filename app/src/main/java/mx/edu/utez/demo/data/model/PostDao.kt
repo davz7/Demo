@@ -1,0 +1,19 @@
+package mx.edu.utez.demo.data.model
+
+import androidx.room.*
+import kotlinx.coroutines.flow.Flow
+
+@Dao
+interface PostDao {
+    @Query("SELECT * FROM posts ORDER BY id DESC")
+    fun getAll(): Flow<List<Post>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(post: Post)
+
+    @Update
+    suspend fun update(post: Post)
+
+    @Delete
+    suspend fun delete(post: Post)
+}

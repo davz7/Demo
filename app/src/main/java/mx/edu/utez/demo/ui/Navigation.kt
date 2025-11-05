@@ -24,7 +24,7 @@ fun Navigation() {
 
     val navController = rememberNavController()
 
-    NavHost(navController = navController,startDestination = "login",
+    NavHost(navController = navController,startDestination = "home",
         modifier = Modifier
     ) {
         composable("login") {
@@ -65,10 +65,6 @@ fun Navigation() {
             // Llamar a la pantalla composable dentro del lambda
             EditPostScreen(navController = navController)
         }
-
-
-
-
     }
 }
 
