@@ -14,7 +14,9 @@ interface PostDao {
     @Update
     suspend fun update(post: Post)
 
+    @Query("SELECT * FROM posts WHERE id = :id LIMIT 1")
+    fun getById(id: Int): Flow<Post?>
+
     @Query("DELETE FROM posts WHERE id = :id")
     suspend fun deleteById(id: Int)
-
 }

@@ -11,31 +11,28 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import mx.edu.utez.demo.R
+import mx.edu.utez.demo.data.model.Post
 import mx.edu.utez.demo.ui.components.ContextMenu
-import mx.edu.utez.demo.viewmodel.PostViewModel
 
 @Composable
 fun ImageGrid(
+    posts: List<Post>,
     onPostOptionsClick: (Int) -> Unit,
     expandedMenuIndex: Int?,
     onDismissMenu: () -> Unit,
     navController: NavController,
-    viewModel: PostViewModel = viewModel()
+    onEditPost: (Post) -> Unit,
+    onDeletePost: (Post) -> Unit
 ) {
-    val posts by viewModel.postsFlow.collectAsState()
-
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = Modifier.padding(top = 16.dp),
@@ -69,16 +66,16 @@ fun ImageGrid(
                         onDismiss = onDismissMenu,
                         navController = navController,
                         post = post,
-                        postViewModel = viewModel
+                        onEdit = { onEditPost(post) },
+                        onDelete = { onDeletePost(post) }
                     )
                 }
-
 
                 IconButton(
                     onClick = { onPostOptionsClick(index) },
                     modifier = Modifier.align(Alignment.TopEnd)
                 ) {
-                    Icon(Icons.Default.MoreVert, "Opciones", tint = Color.White)
+                    Icon(Icons.Default.MoreVert, contentDescription = "Opciones", tint = Color.White)
                 }
             }
         }

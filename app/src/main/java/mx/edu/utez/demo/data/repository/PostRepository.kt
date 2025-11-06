@@ -9,5 +9,6 @@ class PostRepository(private val dao: PostDao) {
 
     suspend fun insert(post: Post) = dao.insert(post)
     suspend fun update(post: Post) = dao.update(post)
+    fun getById(id: Int): Flow<Post?> = dao.getById(id)
     suspend fun deleteById(id: Int) = dao.deleteById(id)
 }

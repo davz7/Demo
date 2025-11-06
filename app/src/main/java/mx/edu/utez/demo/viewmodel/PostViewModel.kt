@@ -32,12 +32,16 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         repository.insert(post)
     }
 
-    fun eliminarById(id: Int) = viewModelScope.launch {
+    fun deleteById(id: Int) = viewModelScope.launch {
         repository.deleteById(id)
     }
 
+    fun getPostById(id: Int): kotlinx.coroutines.flow.Flow<Post?> = repository.getById(id)
 
-    fun actualizar(post: Post) = viewModelScope.launch {
-        repository.update(post)
+    fun updatePost(post: Post) {
+        viewModelScope.launch {
+            repository.update(post)
+        }
     }
+
 }

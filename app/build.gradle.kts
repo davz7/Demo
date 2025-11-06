@@ -42,6 +42,7 @@ android {
 
 dependencies {
     implementation("io.coil-kt:coil-compose:2.6.0")
+    implementation(libs.androidx.ui.graphics)
     val room_version = "2.8.3"
     kapt("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-runtime:$room_version")
