@@ -214,7 +214,7 @@ fun CrearPublicacionScreen(
                                 date = currentDate,
                                 time = currentTime,
                                 imageUri = imageUriString,
-                                profileImageRes = R.drawable.usuario
+                                profileImageRes = R.drawable.perfil
                             )
 
                             postViewModel.insertar(post)
