@@ -21,6 +21,8 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         )
     }
 
+
+
     init {
         val dao = AppDatabase.getDatabase(application).postDao()
         repository = PostRepository(dao)
@@ -30,9 +32,10 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
         repository.insert(post)
     }
 
-    fun eliminar(post: Post) = viewModelScope.launch {
-        repository.delete(post)
+    fun eliminarById(id: Int) = viewModelScope.launch {
+        repository.deleteById(id)
     }
+
 
     fun actualizar(post: Post) = viewModelScope.launch {
         repository.update(post)

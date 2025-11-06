@@ -16,6 +16,8 @@ import mx.edu.utez.demo.viewmodel.PerfilViewModel
 @Composable
 fun PerfilScreen(viewModel: PerfilViewModel, navController: NavController) {
     var expandedMenuIndex by remember { mutableStateOf<Int?>(null) }
+    val onDismissMenu = { expandedMenuIndex = null }
+
 
     Scaffold(
         topBar = { TopAppBar(navController) },

@@ -9,5 +9,5 @@ class PostRepository(private val dao: PostDao) {
 
     suspend fun insert(post: Post) = dao.insert(post)
     suspend fun update(post: Post) = dao.update(post)
-    suspend fun delete(post: Post) = dao.delete(post)
+    suspend fun deleteById(id: Int) = dao.deleteById(id)
 }
