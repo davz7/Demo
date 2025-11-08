@@ -1,46 +1,50 @@
 package mx.edu.utez.demo.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
-import mx.edu.utez.demo.data.AppDatabase
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import mx.edu.utez.demo.data.model.Post
 import mx.edu.utez.demo.data.repository.PostRepository
+import java.io.File
 
-class PostViewModel(application: Application) : AndroidViewModel(application) {
-    private val repository: PostRepository
+class PostViewModel : ViewModel() {
 
-    val postsFlow by lazy {
-        repository.allPosts.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
-        )
+    private val repository = PostRepository()
+
+    private val _posts = MutableLiveData<List<Post>>()
+    val posts: LiveData<List<Post>> get() = _posts
+
+    fun loadPosts() {
+        repository.getPosts { result ->
+            _posts.postValue(result ?: emptyList()) //
+        }
     }
 
 
-
-    init {
-        val dao = AppDatabase.getDatabase(application).postDao()
-        repository = PostRepository(dao)
+    fun createPost(
+        username: String,
+        title: String,
+        description: String,
+        date: String,
+        time: String,
+        imageFile: File?,
+        onSuccess: (Boolean) -> Unit
+    ) {
+        repository.createPost(username, title, description, date, time, imageFile) { success ->
+            if (success) loadPosts() // Recarga la lista después de crear
+            onSuccess(success)
+        }
     }
-
-    fun insertar(post: Post) = viewModelScope.launch {
-        repository.insert(post)
-    }
-
-    fun deleteById(id: Int) = viewModelScope.launch {
-        repository.deleteById(id)
-    }
-
-    fun getPostById(id: Int): kotlinx.coroutines.flow.Flow<Post?> = repository.getById(id)
-
-    fun updatePost(post: Post) {
-        viewModelScope.launch {
-            repository.update(post)
+    fun updatePost(
+        id: Int,
+        title: String,
+        description: String,
+        imageFile: File?,
+        onSuccess: (Boolean) -> Unit
+    ) {
+        repository.updatePost(id, title, description, imageFile) { success ->
+            if (success) loadPosts() // recarga después de editar
+            onSuccess(success)
         }
     }
 

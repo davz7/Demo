@@ -15,6 +15,9 @@ import mx.edu.utez.demo.data.model.Post
 
 @Composable
 fun PostCard(post: Post) {
+    val baseUrl = "http://10.0.2.2:5000/" // 🔹 cambia según tu entorno
+    val imageUrl = if (post.imageUri != null) baseUrl + post.imageUri else null
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -23,12 +26,13 @@ fun PostCard(post: Post) {
         Column(Modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
-                    painter = painterResource(id = post.profileImageRes),
+                    painter = painterResource(id = R.drawable.perfil),
                     contentDescription = "Foto de perfil del usuario",
                     modifier = Modifier
                         .size(40.dp)
                         .padding(end = 8.dp)
                 )
+
                 Column {
                     Text(post.username, style = MaterialTheme.typography.titleMedium)
                     Text("${post.date} ${post.time}", style = MaterialTheme.typography.bodySmall)
@@ -43,10 +47,10 @@ fun PostCard(post: Post) {
 
             Spacer(Modifier.height(8.dp))
 
-            // Imagen del post
-            if (post.imageUri != null) {
+            // 🔹 Imagen desde Flask o imagen por defecto
+            if (imageUrl != null) {
                 Image(
-                    painter = rememberAsyncImagePainter(post.imageUri),
+                    painter = rememberAsyncImagePainter(imageUrl),
                     contentDescription = "Imagen de publicación",
                     modifier = Modifier
                         .fillMaxWidth()

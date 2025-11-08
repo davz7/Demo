@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("kotlin-kapt")
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.0"
 }
 
 android {
@@ -41,6 +42,14 @@ android {
 }
 
 dependencies {
+    implementation(platform("androidx.compose:compose-bom:2024.10.00"))
+    implementation("androidx.compose.runtime:runtime-livedata")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.okhttp3:okhttp:4.10.0")
+
     implementation("io.coil-kt:coil-compose:2.6.0")
     implementation(libs.androidx.ui.graphics)
     val room_version = "2.8.3"

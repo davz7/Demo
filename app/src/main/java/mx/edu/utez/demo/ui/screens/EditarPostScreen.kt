@@ -1,32 +1,75 @@
 package mx.edu.utez.demo.ui.screens
 
-import android.graphics.Bitmap
-import android.net.Uri
+
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
+
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
+
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+
+import androidx.compose.ui.draw.clip
+
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+
+import coil.compose.rememberAsyncImagePainter
+import mx.edu.utez.demo.R
+
+
+
+import android.graphics.Bitmap
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import coil.compose.rememberAsyncImagePainter
-import mx.edu.utez.demo.R
+import mx.edu.utez.demo.data.model.Post
+import mx.edu.utez.demo.ui.components.TopAppBar
 import mx.edu.utez.demo.viewmodel.PostViewModel
 import java.io.File
 import java.io.FileOutputStream
@@ -35,37 +78,25 @@ import java.io.FileOutputStream
 @Composable
 fun EditarPostScreen(
     navController: NavController,
-    postId: Int,
+    post: Post, // 🔹 recibe el post completo
     postViewModel: PostViewModel = viewModel()
 ) {
     val context = LocalContext.current
-    val post by postViewModel.getPostById(postId).collectAsState(initial = null)
 
-    var title by remember { mutableStateOf(TextFieldValue("")) }
-    var description by remember { mutableStateOf(TextFieldValue("")) }
+    var title by remember { mutableStateOf(TextFieldValue(post.title)) }
+    var description by remember { mutableStateOf(TextFieldValue(post.description)) }
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
     var photoBitmap by remember { mutableStateOf<Bitmap?>(null) }
 
-    // Guardar imagen en caché temporal
-    fun saveBitmapToCache(bitmap: Bitmap): Uri {
+    fun saveBitmapToCache(bitmap: Bitmap): File {
         val file = File(context.cacheDir, "photo_${System.currentTimeMillis()}.jpg")
         val stream = FileOutputStream(file)
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
         stream.flush()
         stream.close()
-        return Uri.fromFile(file)
+        return file
     }
 
-    // Cargar los datos existentes del post
-    LaunchedEffect(post) {
-        post?.let {
-            title = TextFieldValue(it.title)
-            description = TextFieldValue(it.description)
-            selectedImageUri = it.imageUri?.let { uri -> Uri.parse(uri) }
-        }
-    }
-
-    // Lanzadores de galería y cámara
     val galleryLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
         onResult = { uri -> selectedImageUri = uri; photoBitmap = null }
@@ -104,7 +135,6 @@ fun EditarPostScreen(
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                // Imagen actual
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -113,6 +143,9 @@ fun EditarPostScreen(
                         .background(Color.LightGray),
                     contentAlignment = Alignment.Center
                 ) {
+                    val baseUrl = "http://10.0.2.2:5000/"
+                    val imageUrl = post.imageUri?.let { baseUrl + it }
+
                     when {
                         photoBitmap != null -> Image(
                             bitmap = photoBitmap!!.asImageBitmap(),
@@ -126,8 +159,8 @@ fun EditarPostScreen(
                             modifier = Modifier.fillMaxSize(),
                             contentScale = ContentScale.Crop
                         )
-                        post?.imageUri != null -> Image(
-                            painter = rememberAsyncImagePainter(post!!.imageUri),
+                        imageUrl != null -> Image(
+                            painter = rememberAsyncImagePainter(imageUrl),
                             contentDescription = null,
                             modifier = Modifier.fillMaxSize(),
                             contentScale = ContentScale.Crop
@@ -183,23 +216,26 @@ fun EditarPostScreen(
 
             Button(
                 onClick = {
-                    post?.let { oldPost ->
-                        val newImageUri = when {
-                            photoBitmap != null -> saveBitmapToCache(photoBitmap!!).toString()
-                            selectedImageUri != null -> selectedImageUri.toString()
-                            else -> oldPost.imageUri
+                    val imageFile = when {
+                        photoBitmap != null -> saveBitmapToCache(photoBitmap!!)
+                        selectedImageUri != null -> {
+                            val input = context.contentResolver.openInputStream(selectedImageUri!!)
+                            val tempFile = File(context.cacheDir, "upload_${System.currentTimeMillis()}.jpg")
+                            tempFile.outputStream().use { output ->
+                                input?.copyTo(output)
+                            }
+                            tempFile
                         }
+                        else -> null
+                    }
 
-                        val updatedPost = oldPost.copy(
-                            title = title.text,
-                            description = description.text,
-                            imageUri = newImageUri
-                        )
-
-                        postViewModel.updatePost(updatedPost)
-                        navController.navigate("perfil") {
-                            popUpTo("perfil") { inclusive = true }
-                        }
+                    postViewModel.updatePost(
+                        id = post.id,
+                        title = title.text,
+                        description = description.text,
+                        imageFile = imageFile
+                    ) { success ->
+                        if (success) navController.popBackStack()
                     }
                 },
                 modifier = Modifier

@@ -31,7 +31,7 @@ import coil.compose.rememberAsyncImagePainter
 import mx.edu.utez.demo.R
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import mx.edu.utez.demo.data.model.Post
+import mx.edu.utez.demo.viewmodel.PostViewModel
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
@@ -41,7 +41,7 @@ import java.util.*
 @Composable
 fun CrearPublicacionScreen(
     navController: NavHostController,
-    postViewModel: mx.edu.utez.demo.viewmodel.PostViewModel = viewModel()
+    postViewModel: PostViewModel = viewModel() // 🔹 usa tu nuevo ViewModel con Retrofit
 ) {
     val context = LocalContext.current
 
@@ -134,7 +134,6 @@ fun CrearPublicacionScreen(
                         )
                     }
 
-                    // Botones sobre la imagen
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Button(
                             onClick = {
@@ -194,31 +193,43 @@ fun CrearPublicacionScreen(
                     Text("Cancelar publicación", color = Color.Black)
                 }
 
-                // Botón Publicar con estilo moderno
+                // 🔹 BOTÓN PUBLICAR con Retrofit
                 Button(
                     onClick = {
                         if (title.text.isNotEmpty() && description.text.isNotEmpty()) {
                             val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
                             val currentTime = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date())
 
-                            val imageUriString = when {
-                                photoBitmap != null -> saveBitmapToCache(photoBitmap!!).toString()
-                                selectedImageUri != null -> selectedImageUri.toString()
+                            // Convertir imagen seleccionada a archivo temporal
+                            val imageFile = when {
+                                photoBitmap != null -> {
+                                    val uri = saveBitmapToCache(photoBitmap!!)
+                                    File(uri.path!!)
+                                }
+                                selectedImageUri != null -> {
+                                    val input = context.contentResolver.openInputStream(selectedImageUri!!)
+                                    val tempFile = File(context.cacheDir, "upload_${System.currentTimeMillis()}.jpg")
+                                    tempFile.outputStream().use { output ->
+                                        input?.copyTo(output)
+                                    }
+                                    tempFile
+                                }
                                 else -> null
                             }
 
-                            val post = Post(
+                            // Llamada a Flask API
+                            postViewModel.createPost(
                                 username = "Davor",
                                 title = title.text,
                                 description = description.text,
                                 date = currentDate,
                                 time = currentTime,
-                                imageUri = imageUriString,
-                                profileImageRes = R.drawable.perfil
-                            )
-
-                            postViewModel.insertar(post)
-                            navController.navigate("home")
+                                imageFile = imageFile
+                            ) { success ->
+                                if (success) {
+                                    navController.navigate("home")
+                                }
+                            }
                         }
                     },
                     modifier = Modifier

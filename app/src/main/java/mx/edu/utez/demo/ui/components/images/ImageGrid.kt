@@ -45,9 +45,13 @@ fun ImageGrid(
                     .aspectRatio(1f)
                     .background(Color.LightGray)
             ) {
-                if (post.imageUri != null) {
+                // 🔹 Cargar imagen desde Flask o usar imagen por defecto
+                val baseUrl = "http://10.0.2.2:5000/" // cambia por tu IP si usas dispositivo físico
+                val imageUrl = post.imageUri?.let { baseUrl + it }
+
+                if (imageUrl != null) {
                     Image(
-                        painter = rememberAsyncImagePainter(post.imageUri),
+                        painter = rememberAsyncImagePainter(imageUrl),
                         contentDescription = "Imagen de publicación",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier.fillMaxSize()
